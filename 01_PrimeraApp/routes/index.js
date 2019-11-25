@@ -8,13 +8,15 @@ const controller = require('../controllers/index');
 });
  */
 
-router.get('/', controller.reqlogger, 
-                controller.getController 
-                );
-router.post('/', controller.postController);
-router.put('/', controller.putController);
-router.delete('/', controller.loggerDelete, controller.deleteController);
-
+router.get('/', controller.getController);
 router.get('/:id', controller.getUno)
+
+router.post('/', controller.postController);
+
+router.put('/:id', controller.putController);
+
+router.delete('/:id', controller.deleteController);
+
+
 
 module.exports = router;

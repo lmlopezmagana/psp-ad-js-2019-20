@@ -1,43 +1,49 @@
 
 const servicio = require('../services/index');
 
-
-module.exports.reqlogger = (req, res, next) => {
-    console.log(req);
-    next();
-}
-
-module.exports.reslogger = (req, res, next) => {
-    console.log(res);
-    next();
-}
-
 module.exports.getController = (req, res) => {
     let resultado = servicio.getTodos();
     //res.status(200).json({mensaje: "Hola Mundo!"})
     res.status(200).json(resultado);
 };
 
+module.exports.getUno = (req, res) => {
+    const result = servicio.getUno(req.params.id);
+    if (result.length == 0)
+        res.sendStatus(404);
+    else
+        res.status(200).json(result[0]);
+}
+
 module.exports.postController = (req, res, next) => {
-    res.status(201).json({mensaje: req.body.mensaje})
+
+    res.status(201).json(servicio.insert({
+        userId: req.body.userId,
+        id: req.body.id,
+        title: req.body.title,
+        body: req.body.body
+    }));
 }
 
 module.exports.putController = (req, res, next) => {
-    res.status(200).json({
-      mensaje: req.body.mensaje,
-      modificado: true
+    
+    let result = servicio.update(req.params.id, {
+        userId: req.body.userId,
+        title: req.body.title,
+        body: req.body.body
     })
+
+    if (result === undefined) {
+        res.sendStatus(404);
+    } else {
+        res.status(200).json(result);
+    }
 }
 
-module.exports.loggerDelete = (req, res, next) => {
-    console.log('Borrando un elemento')
-    next()
-}
 
 module.exports.deleteController = (req, res) => {
-    res.sendStatus(204)
+    
+    let status = servicio.delete(req.params.id) ? 204 : 404;
+    res.sendStatus(status);
 }
 
-module.exports.getUno = (req, res) => {
-    res.status(200).json(servicio.getUno(req.params.id));
-}
