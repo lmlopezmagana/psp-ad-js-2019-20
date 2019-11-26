@@ -2,6 +2,22 @@
  * Este ejemplo es una modificación de https://github.com/davidpoza/passport-jwt-example/ para
  * que trabaje, en lugar de sobre una base de datos, sobre una colección de usuarios, manejada
  * por un servicio con diferentes funciones de inserción y búsqueda
+ * 
+ * Se debe añadir un fichero .env en la raiz del proyecto, con al menos las siguientes constantes
+ * 
+ * # secret for encryption of jwt signature
+ * JWT_SECRET=esteeselsecretomassecretodetodoslossecretos
+ *
+ * # number of rounds for Blowfish algorithm for hashing user password
+ * BCRYPT_ROUNDS=12
+ * 
+ * # lifetime of the token (in seconds)
+ * JWT_LIFETIME=86400
+ * 
+ * # algorithm used in token signing
+ * JWT_ALGORITHM=HS256
+ * 
+ 
  */
 
 
