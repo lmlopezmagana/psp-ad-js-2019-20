@@ -15,7 +15,7 @@ let controller = {
     register: (req, res, next) => {
         console.log("Caso register");
         let resultado = UserService.findUser({username : req.body.username});
-        if (resultado == undefined) {
+        if (resultado != undefined) {
             //throw new error_types.InfoError("user already exists");
             next(new error_types.InfoError("user already exists"));
         } else {
