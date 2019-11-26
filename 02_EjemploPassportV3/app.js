@@ -1,3 +1,10 @@
+/**
+ * Este ejemplo es una modificación de https://github.com/davidpoza/passport-jwt-example/ para
+ * que trabaje, en lugar de sobre una base de datos, sobre una colección de usuarios, manejada
+ * por un servicio con diferentes funciones de inserción y búsqueda
+ */
+
+
 const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
