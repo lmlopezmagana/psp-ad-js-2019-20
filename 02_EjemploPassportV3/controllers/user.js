@@ -2,7 +2,7 @@
 
 //const User      = require('../models/user');
 const UserService = require('../services/user')
-const bcrypt    = require('bcrypt');
+const bcrypt    = require('bcryptjs');
 const passport  = require('passport');
 const jwt       = require('jsonwebtoken');
 const error_types = require('./error_types');
