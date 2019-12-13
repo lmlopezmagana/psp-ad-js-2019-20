@@ -13,6 +13,5 @@ const ticketSchema = new mongoose.Schema({
 });
 
 //MODELO SEGUN EL ESUQEMA DE TICKET
-//const Ticket = mongoose.model('Ticket', ticketSchema);
 
-module.exports.Ticket = mongoose.model('Ticket', ticketSchema);
+module.exports = mongoose.model('Ticket', ticketSchema);
