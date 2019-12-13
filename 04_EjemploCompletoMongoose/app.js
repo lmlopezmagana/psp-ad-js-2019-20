@@ -13,6 +13,7 @@ const user_routes = require('./routes/users');
 const ticket_routes = require('./routes/tickets');
 const middleware = require('./middleware/index'); 
 const UserService = require('./services/user')
+const User = require('./models/user');
 require('dotenv').config();
 
 const mongoose = require('mongoose');
@@ -34,12 +35,22 @@ db.once('open', () => {
 
 passport.use(new LocalStrategy((username, password, done) => {
     let busqueda = (username.includes('@')) ? { email: username } : { username: username };
-    let data = UserService.findUser(busqueda);
-    if (data === undefined) return done(null, false);
+    //let data = UserService.findUser(busqueda);
+    User.findOne(busqueda, (err, user) => {
+        if (err) return done(null, false);
+        if (!bcrypt.compareSync(password, user.password)) {
+            return done(null, false);
+        }
+        return done(null, user);
+    });
+
+
+/*     if (data === undefined) return done(null, false);
     else if (!bcrypt.compareSync(password, data.password)) {
         return done(null, false);
     }
     return done(null, data); 
+ */
 }));
 
 let opts = {}
@@ -48,11 +59,18 @@ opts.secretOrKey = process.env.JWT_SECRET;
 opts.algorithms = [process.env.JWT_ALGORITHM];
 
 passport.use(new JwtStrategy(opts, (jwt_payload, done) => {
-    let data = UserService.findById(jwt_payload.sub);
-    if (data === null)
+    //let data = UserService.findById(jwt_payload.sub);
+    User.findById(jwt_payload.sub, (err, user) => {
+        if (err) return done(null, false);
+        else return done(null, user);
+    });
+
+
+/*     if (data === null)
         return done(null, false);
     else
         return done(null, data);
+ */
 }));
 
 const app = express()

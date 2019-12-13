@@ -12,7 +12,7 @@ let controller = {
     register: (req, res, next) => {
         //let resultado = UserService.findUser({username : req.username});
         User.find({username: req.body.username}, (err, result) => {
-            if (false) { //(result.length > 0) {
+           if (result.length > 0) { 
                 next(new error_types.InfoError("user already exists"));
             } else {
                 let hash = bcrypt.hashSync(req.body.password, parseInt(process.env.BCRYPT_ROUNDS));
@@ -56,7 +56,7 @@ let controller = {
                 const token = jwt.sign(JSON.stringify(payload), process.env.JWT_SECRET, {algorithm: process.env.JWT_ALGORITHM});
                 res.json({ 
                     username: user.username,
-                    token: token 
+                    token: token
                 });
 
             }
