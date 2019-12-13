@@ -5,12 +5,32 @@ const bcrypt    = require('bcryptjs');
 const passport  = require('passport');
 const jwt       = require('jsonwebtoken');
 const error_types = require('./error_types');
+const User = require('../models/user');
 
 let controller = {
     
     register: (req, res, next) => {
-        let resultado = UserService.findUser({username : req.username});
-        if (resultado != undefined) {
+        //let resultado = UserService.findUser({username : req.username});
+        User.find({username: req.body.username}, (err, result) => {
+            if (false) { //(result.length > 0) {
+                next(new error_types.InfoError("user already exists"));
+            } else {
+                let hash = bcrypt.hashSync(req.body.password, parseInt(process.env.BCRYPT_ROUNDS));
+                let user = new User({
+                    email: req.body.email,
+                    username: req.body.username,
+                    fullname: req.body.fullname,
+                    roles: ['INFORMADOR'],
+                    password: hash
+                });
+
+                user.save((err, user) => {
+                    if (err) next(new error_types.Error400(err.message));
+                    res.status(201).json(user);
+                });
+            }
+        })
+/*         if (resultado != undefined) {
             next(new error_types.InfoError("user already exists"));
         } else {
             let hash = bcrypt.hashSync(req.body.password, parseInt(process.env.BCRYPT_ROUNDS));
@@ -20,7 +40,7 @@ let controller = {
                 password: hash
             })
             res.json(inserted)
-        }
+         }*/
     }
     ,
     login: (req, res, next) => {
