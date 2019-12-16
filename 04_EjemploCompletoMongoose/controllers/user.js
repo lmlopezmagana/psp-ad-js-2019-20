@@ -10,10 +10,9 @@ const User = require('../models/user');
 let controller = {
     
     register: (req, res, next) => {
-        //let resultado = UserService.findUser({username : req.username});
         User.find({username: req.body.username}, (err, result) => {
            if (result.length > 0) { 
-                next(new error_types.InfoError("user already exists"));
+                next(new error_types.Error400("user already exists"));
             } else {
                 let hash = bcrypt.hashSync(req.body.password, parseInt(process.env.BCRYPT_ROUNDS));
                 let user = new User({
@@ -30,19 +29,19 @@ let controller = {
                 });
             }
         })
-/*         if (resultado != undefined) {
-            next(new error_types.InfoError("user already exists"));
-        } else {
-            let hash = bcrypt.hashSync(req.body.password, parseInt(process.env.BCRYPT_ROUNDS));
-            let inserted = UserService.insertUser({
-                email: req.body.email,
-                username: req.body.username,
-                password: hash
-            })
-            res.json(inserted)
-         }*/
-    }
-    ,
+    },
+    // Método que sirve para promocionar a un usuario informador a TECNICO
+    upgrade: (req, res, next) => {
+        // ID del usuario a modificar.
+        const user_id = req.params.id
+        User.findByIdAndUpdate(user_id, { $addToSet : { roles: "TECNICO" }}, {new: true}, (err, user) => {
+            if (err) next(new error_types.Error500(err.message));
+            if (user == null) 
+                next(new error_types.Error404("No se ha encontrado ningún usuario con ese ID"))
+            else
+                res.status(200).json(user);
+        });
+    },
     login: (req, res, next) => {
         passport.authenticate("local", {session: false}, (error, user) => {
             if (error || !user) {
@@ -60,10 +59,8 @@ let controller = {
                 });
 
             }
-
         })(req, res)
     }
-
 
 }
 

@@ -5,7 +5,7 @@ const _ = require('lodash')
 const UserService = require('./user')
 
 
-const tickets = [
+/* const tickets = [
     {
         id: 1,
         fecha: new Date(2019, 11, 29, 12, 35),
@@ -47,7 +47,7 @@ const tickets = [
         tecnico: 1
     },
 ]
-
+ */
 
 let service = {    
     findAll: () => {

@@ -22,6 +22,7 @@ const mongoose = require('mongoose');
    CONECTAR CON MONGO
 */
 mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
+mongoose.set('useFindAndModify', false);
 
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error: '));
@@ -45,12 +46,6 @@ passport.use(new LocalStrategy((username, password, done) => {
     });
 
 
-/*     if (data === undefined) return done(null, false);
-    else if (!bcrypt.compareSync(password, data.password)) {
-        return done(null, false);
-    }
-    return done(null, data); 
- */
 }));
 
 let opts = {}
@@ -64,13 +59,6 @@ passport.use(new JwtStrategy(opts, (jwt_payload, done) => {
         if (err) return done(null, false);
         else return done(null, user);
     });
-
-
-/*     if (data === null)
-        return done(null, false);
-    else
-        return done(null, data);
- */
 }));
 
 const app = express()

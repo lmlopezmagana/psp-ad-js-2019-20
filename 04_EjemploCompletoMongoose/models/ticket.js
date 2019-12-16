@@ -9,7 +9,15 @@ const ticketSchema = new mongoose.Schema({
     tipo: {type: String, enum: [
         'OTROS', 'SISTEMA_OPERATIVO', 'INTERNET', 'FISICO'
     ]},
-    comentario: {type: String}
+    comentario: {type: String},
+    usuario : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    tecnico: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
 });
 
 //MODELO SEGUN EL ESUQEMA DE TICKET
